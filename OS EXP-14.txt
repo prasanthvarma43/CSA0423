@@ -1,10 +1,13 @@
 #include <stdio.h>
 #include <string.h>
 
-struct {
-    char dname[10], fname[10][10];
+struct Directory {
+    char dname[10];
+    char fname[10][10];
     int fcnt;
-} dir;
+};
+
+struct Directory dir;
 
 int main() {
     int choice;
@@ -39,7 +42,7 @@ int main() {
             for (int i = 0; i < dir.fcnt; i++) {
                 if (strcmp(fname, dir.fname[i]) == 0) {
                     printf("File deleted!\n");
-                    strcpy(dir.fname[i], dir.fname[dir.fcnt - 1]); // replace with last file
+                    strcpy(dir.fname[i], dir.fname[dir.fcnt - 1]);
                     dir.fcnt--;
                     break;
                 }
@@ -79,3 +82,4 @@ int main() {
         }
     }
 }
+
