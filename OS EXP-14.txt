@@ -1,0 +1,81 @@
+#include <stdio.h>
+#include <string.h>
+
+struct {
+    char dname[10], fname[10][10];
+    int fcnt;
+} dir;
+
+int main() {
+    int choice;
+    char fname[10];
+
+    dir.fcnt = 0;
+    printf("\nEnter directory name: ");
+    scanf("%s", dir.dname);
+
+    while (1) {
+        printf("\n--- Single Level Directory Menu ---\n");
+        printf("1. Create File\n");
+        printf("2. Delete File\n");
+        printf("3. Search File\n");
+        printf("4. Display Files\n");
+        printf("5. Exit\n");
+        printf("Enter choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+        case 1:
+            printf("Enter file name: ");
+            scanf("%s", dir.fname[dir.fcnt]);
+            dir.fcnt++;
+            printf("File created!\n");
+            break;
+
+        case 2:
+            printf("Enter file name to delete: ");
+            scanf("%s", fname);
+
+            for (int i = 0; i < dir.fcnt; i++) {
+                if (strcmp(fname, dir.fname[i]) == 0) {
+                    printf("File deleted!\n");
+                    strcpy(dir.fname[i], dir.fname[dir.fcnt - 1]); // replace with last file
+                    dir.fcnt--;
+                    break;
+                }
+                if (i == dir.fcnt - 1)
+                    printf("File not found!\n");
+            }
+            break;
+
+        case 3:
+            printf("Enter file name to search: ");
+            scanf("%s", fname);
+
+            for (int i = 0; i < dir.fcnt; i++) {
+                if (strcmp(fname, dir.fname[i]) == 0) {
+                    printf("File found!\n");
+                    break;
+                }
+                if (i == dir.fcnt - 1)
+                    printf("File not found!\n");
+            }
+            break;
+
+        case 4:
+            printf("\nDirectory Name: %s", dir.dname);
+            printf("\nFiles:\n");
+            for (int i = 0; i < dir.fcnt; i++) {
+                printf("%s\n", dir.fname[i]);
+            }
+            break;
+
+        case 5:
+            printf("Exiting...\n");
+            return 0;
+
+        default:
+            printf("Invalid option!\n");
+        }
+    }
+}
