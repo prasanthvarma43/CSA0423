@@ -1,0 +1,123 @@
+#include <stdio.h>
+#include <string.h>
+
+struct Directory {
+    char dname[10];       // directory name
+    char fname[10][10];   // files under this directory
+    int fcnt;             // file count
+};
+
+struct Directory dir[10];    // up to 10 directories (users)
+
+int main() {
+    int dcnt = 0;   // number of created directories
+    int choice;
+    char dirname[10], filename[10];
+
+    while (1) {
+        printf("\n--- Two Level Directory Menu ---\n");
+        printf("1. Create Directory\n");
+        printf("2. Create File\n");
+        printf("3. Delete File\n");
+        printf("4. Search File\n");
+        printf("5. Display Directory Structure\n");
+        printf("6. Exit\n");
+        printf("Enter choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+
+        case 1:
+            printf("Enter directory name: ");
+            scanf("%s", dir[dcnt].dname);
+            dir[dcnt].fcnt = 0;   // initialize
+            dcnt++;
+            printf("Directory created successfully.\n");
+            break;
+
+        case 2:
+            printf("Enter directory name: ");
+            scanf("%s", dirname);
+            printf("Enter file name: ");
+            scanf("%s", filename);
+
+            for (int i = 0; i < dcnt; i++) {
+                if (strcmp(dirname, dir[i].dname) == 0) {
+                    strcpy(dir[i].fname[dir[i].fcnt], filename);
+                    dir[i].fcnt++;
+                    printf("File created successfully.\n");
+                    break;
+                }
+                if (i == dcnt - 1)
+                    printf("Directory not found!\n");
+            }
+            break;
+
+        case 3:
+            printf("Enter directory name: ");
+            scanf("%s", dirname);
+            printf("Enter file name to delete: ");
+            scanf("%s", filename);
+
+            for (int i = 0; i < dcnt; i++) {
+                if (strcmp(dirname, dir[i].dname) == 0) {
+                    for (int j = 0; j < dir[i].fcnt; j++) {
+                        if (strcmp(filename, dir[i].fname[j]) == 0) {
+                            printf("File deleted successfully.\n");
+                            strcpy(dir[i].fname[j], dir[i].fname[dir[i].fcnt - 1]);
+                            dir[i].fcnt--;
+                            break;
+                        }
+                        if (j == dir[i].fcnt - 1)
+                            printf("File not found!\n");
+                    }
+                    break;
+                }
+                if (i == dcnt - 1)
+                    printf("Directory not found!\n");
+            }
+            break;
+
+        case 4:
+            printf("Enter directory name: ");
+            scanf("%s", dirname);
+            printf("Enter file name to search: ");
+            scanf("%s", filename);
+
+            for (int i = 0; i < dcnt; i++) {
+                if (strcmp(dirname, dir[i].dname) == 0) {
+                    for (int j = 0; j < dir[i].fcnt; j++) {
+                        if (strcmp(filename, dir[i].fname[j]) == 0) {
+                            printf("File found!\n");
+                            break;
+                        }
+                        if (j == dir[i].fcnt - 1)
+                            printf("File not found!\n");
+                    }
+                    break;
+                }
+                if (i == dcnt - 1)
+                    printf("Directory not found!\n");
+            }
+            break;
+
+        case 5:
+            printf("\n--- Directory Structure ---\n");
+            for (int i = 0; i < dcnt; i++) {
+                printf("Directory: %s\n", dir[i].dname);
+                for (int j = 0; j < dir[i].fcnt; j++) {
+                    printf("  %s\n", dir[i].fname[j]);
+                }
+                printf("\n");
+            }
+            break;
+
+        case 6:
+            printf("Exiting...\n");
+            return 0;
+
+        default:
+            printf("Invalid choice!\n");
+        }
+    }
+}
