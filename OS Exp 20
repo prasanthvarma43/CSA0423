@@ -1,0 +1,38 @@
+#include <stdio.h>
+
+int readcount = 0;
+int mutex = 1, wrt = 1;  // semaphores
+
+void wait(int *s){ (*s)--; }
+void signal(int *s){ (*s)++; }
+
+void reader() {
+    wait(&mutex);
+    readcount++;
+    if (readcount == 1)
+        wait(&wrt);  // first reader locks writer
+    signal(&mutex);
+
+    printf("Reader reading... (%d readers)\n", readcount);
+
+    wait(&mutex);
+    readcount--;
+    if (readcount == 0)
+        signal(&wrt); // last reader releases writer
+    signal(&mutex);
+}
+
+void writer() {
+    wait(&wrt);
+    printf("Writer writing...\n");
+    signal(&wrt);
+}
+
+int main() {
+    reader();
+    reader();
+    writer();
+    reader();
+    writer();
+    return 0;
+}
