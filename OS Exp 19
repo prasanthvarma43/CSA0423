@@ -1,0 +1,22 @@
+#include <stdio.h>
+
+int mutex = 1;
+int counter = 0;
+
+void lock(){ mutex = 0; }
+void unlock(){ mutex = 1; }
+
+void process(char name){
+    if(mutex){
+        lock();
+        counter++;
+        printf("Process %c updated counter = %d\n", name, counter);
+        unlock();
+    }
+}
+
+int main(){
+    process('A');
+    process('B');
+    process('C');
+}
