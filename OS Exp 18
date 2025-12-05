@@ -1,0 +1,31 @@
+#include <stdio.h>
+
+int mutex=1, full=0, empty=3, buffer=0;
+
+void wait(int *s){ (*s)--; }
+void signal(int *s){ (*s)++; }
+
+void producer(){
+    wait(&mutex);
+    wait(&empty);
+    buffer++;
+    printf("Produced %d\n",buffer);
+    signal(&full);
+    signal(&mutex);
+}
+
+void consumer(){
+    wait(&mutex);
+    wait(&full);
+    printf("Consumed %d\n",buffer);
+    buffer--;
+    signal(&empty);
+    signal(&mutex);
+}
+
+int main(){
+    producer();
+    producer();
+    consumer();
+    producer();
+}
